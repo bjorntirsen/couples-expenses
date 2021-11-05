@@ -5,7 +5,7 @@ import styles from './Landing.module.css';
 
 const Landing: NextPage = () => {
   return (
-    <div className={styles.container}>
+    <section className={styles.container}>
       <Head>
         <title>Couples Expenses</title>
         <meta
@@ -15,7 +15,7 @@ const Landing: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <main className={styles.main}>
+      <div className={styles.main}>
         <h1 className={styles.title}>Welcome to Couples Expenses!</h1>
 
         <p className={styles.description}>
@@ -33,21 +33,8 @@ const Landing: NextPage = () => {
             <p>Start using the app!</p>
           </a>
         </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href='https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src='/vercel.svg' alt='Vercel Logo' width={72} height={16} />
-          </span>
-        </a>
-      </footer>
-    </div>
+      </div>
+    </section>
   );
 };
 
