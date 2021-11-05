@@ -1,9 +1,28 @@
+:root {
+  --white: #fff;
+  --primary-p8: #f3fdf6;
+  --primary-p7: #e4fbeb;
+  --primary-p6: #d5f9e0;
+  --primary-p3: #a8f3c0;
+  --primary: #7bed9f;
+  --primary-m3: #4ee77e;
+  --primary-m6: #21e15e;
+  --primary-m9: #19b64b;
+  --primary-m12: #138938;
+  --primary-m15: #0d5d26;
+  --primary-m18: #073014;
+  --primary-m21: #000301;
+  --black: #000000;
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background: linear-gradient(var(--primary-p7), var(--primary-p6));
+  min-height: 100vh;
 }
 
 a {
