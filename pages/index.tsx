@@ -1,6 +1,8 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import CardLink from '../components/UI/CardLink';
+import GridContainer from '../components/UI/GridContainer';
 import styles from './Landing.module.css';
 
 const Landing: NextPage = () => {
@@ -22,17 +24,17 @@ const Landing: NextPage = () => {
           Get started by following one of the following links:
         </p>
 
-        <div className={styles.grid}>
-          <a href='/next' className={styles.card}>
+        <GridContainer>
+          <CardLink linkTo='/next'>
             <h2>Learn about Next.js &rarr;</h2>
             <p>The React.js framework.</p>
-          </a>
+          </CardLink>
 
-          <a href='/expenses' className={styles.card}>
+          <CardLink linkTo='/expenses'>
             <h2>Split your expenses &rarr;</h2>
             <p>Start using the app!</p>
-          </a>
-        </div>
+          </CardLink>
+        </GridContainer>
       </div>
     </section>
   );
