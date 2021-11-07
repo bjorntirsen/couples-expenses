@@ -1,13 +1,13 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import CardLink from '../components/UI/CardLink';
 import GridContainer from '../components/UI/GridContainer';
-import styles from './Landing.module.css';
+import SectionTitle from '../components/UI/SectionTitle';
+import SectionWrapper from '../components/UI/SectionWrapper';
 
 const Landing: NextPage = () => {
   return (
-    <section className={styles.container}>
+    <>
       <Head>
         <title>Couples Expenses</title>
         <meta
@@ -17,12 +17,11 @@ const Landing: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <div className={styles.main}>
-        <h1 className={styles.title}>Welcome to Couples Expenses!</h1>
-
-        <p className={styles.description}>
-          Get started by following one of the following links:
-        </p>
+      <SectionWrapper>
+        <SectionTitle
+          title='Welcome to Couples Expenses!'
+          subtitle='Get started by following one of the following links:'
+        />
 
         <GridContainer>
           <CardLink linkTo='/next'>
@@ -35,8 +34,8 @@ const Landing: NextPage = () => {
             <p>Start using the app!</p>
           </CardLink>
         </GridContainer>
-      </div>
-    </section>
+      </SectionWrapper>
+    </>
   );
 };
 
