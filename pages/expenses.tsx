@@ -19,8 +19,9 @@ const ExpensesPage: NextPage = () => {
   //   p2spent: number;
   // }
 
-  const monthAddHandler = () => {
+  const monthAddHandler = (text: string) => {
     console.log('month added');
+    console.log(text);
     // setMonths((prevMonths) => [
     //   ...prevMonths,
     //   { id: Math.random().toString(), locked: true, ...data },
