@@ -1,13 +1,13 @@
 import type { NextPage } from 'next';
 import { useState } from 'react';
 import Head from 'next/head';
-import SectionWrapper from '../components/UI/SectionWrapper';
-import SectionTitle from '../components/UI/SectionTitle';
-import ExpensesForm from '../components/expenses/ExpensesForm';
-import { Month } from '../components/month.model';
-import MonthsList from '../components/expenses/MonthsList';
+import SectionWrapper from '../../components/UI/SectionWrapper';
+import SectionTitle from '../../components/UI/SectionTitle';
+import ExpensesForm from '../../components/expenses/ExpensesForm';
+import { Month } from '../../components/month.model';
+import MonthsList from '../../components/expenses/MonthsList';
 
-const ExpensesPage: NextPage = () => {
+const MonthDetailsPage: NextPage = () => {
   const [months, setMonths] = useState<Month[]>([]);
 
   const monthAddHandler = (formData: Month) => {
@@ -19,7 +19,7 @@ const ExpensesPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Couples Expenses - Expenses</title>
+        <title>Couples Expenses - Details</title>
         <meta
           name='description'
           content='Enter your common expenses at the end of the month'
@@ -28,14 +28,13 @@ const ExpensesPage: NextPage = () => {
       </Head>
       <SectionWrapper>
         <SectionTitle
-          title='This is the Expenses page'
-          subtitle='Add your expenses here:'
+          title='This is the Details page'
+          subtitle='Edit your past expenses here:'
         />
         <ExpensesForm onAddMonth={monthAddHandler} />
-        <MonthsList items={months} />
       </SectionWrapper>
     </>
   );
 };
 
-export default ExpensesPage;
+export default MonthDetailsPage;

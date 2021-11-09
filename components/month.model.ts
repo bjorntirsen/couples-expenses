@@ -1,6 +1,6 @@
 export interface Month {
-  id: string;
-  month: Date;
+  id?: string;
+  month?: string;
   person1?: string;
   person2?: string;
   p1income: number;

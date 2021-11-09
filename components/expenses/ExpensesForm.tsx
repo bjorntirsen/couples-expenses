@@ -1,12 +1,20 @@
 import { FC, FormEvent, useRef, useState } from 'react';
+import { Month } from '../month.model';
 import classes from './ExpensesForm.module.css';
 
 interface Props {
-  onAddMonth: (a: string) => void;
+  onAddMonth: (a: Month) => void;
+  displayMonth?: Month;
 }
 
-const ExpensesForm: FC<Props> = ({ onAddMonth }) => {
-  const [formFields, setFormFields] = useState(null);
+const ExpensesForm: FC<Props> = ({ onAddMonth, displayMonth }) => {
+  const [formFields, setFormFields] = useState<Month>({
+    month: 'not set',
+    p1income: 0,
+    p2income: 0,
+    p1spent: 0,
+    p2spent: 0,
+  });
   const monthInputRef = useRef<HTMLInputElement>(null);
   const person1InputRef = useRef<HTMLInputElement>(null);
   const person2InputRef = useRef<HTMLInputElement>(null);
@@ -18,10 +26,15 @@ const ExpensesForm: FC<Props> = ({ onAddMonth }) => {
   const [totalSpent, setTotalSpent] = useState(0);
 
   const handleOnChange = (event: FormEvent) => {
-    console.log(
-      (event.target as HTMLInputElement).id,
-      (event.target as HTMLInputElement).value
-    );
+    // Update formData
+    const eventTarget = event.target as HTMLInputElement;
+    const formData: any = { ...formFields };
+    console.log(eventTarget.id, typeof eventTarget.value);
+    eventTarget.type === 'number'
+      ? (formData[eventTarget.id] = +eventTarget.value)
+      : (formData[eventTarget.id] = eventTarget.value);
+    setFormFields(formData);
+    // Update calculations
     const p1income = +p1incomeInputRef.current!.value;
     const p2income = +p2incomeInputRef.current!.value;
     const p1spent = +p1spentInputRef.current!.value;
@@ -32,7 +45,7 @@ const ExpensesForm: FC<Props> = ({ onAddMonth }) => {
 
   const monthSubmitHandler = (event: FormEvent) => {
     event.preventDefault();
-    onAddMonth('string added');
+    onAddMonth(formFields);
     console.log('submit');
   };
 
@@ -66,7 +79,7 @@ const ExpensesForm: FC<Props> = ({ onAddMonth }) => {
             <td>
               <input
                 type='text'
-                placeholder='person 1'
+                defaultValue='person 1'
                 aria-labelledby='person1'
                 id='person1'
                 ref={person1InputRef}
@@ -76,7 +89,7 @@ const ExpensesForm: FC<Props> = ({ onAddMonth }) => {
             <td>
               <input
                 type='text'
-                placeholder='person 2'
+                defaultValue='person 2'
                 aria-labelledby='person2'
                 id='person2'
                 ref={person2InputRef}
@@ -91,6 +104,7 @@ const ExpensesForm: FC<Props> = ({ onAddMonth }) => {
                 ref={p1incomeInputRef}
                 min={0}
                 id='p1income'
+                defaultValue={0}
               />
             </td>
             <td>{totalIncome}</td>
@@ -100,6 +114,7 @@ const ExpensesForm: FC<Props> = ({ onAddMonth }) => {
                 ref={p2incomeInputRef}
                 min={0}
                 id='p2income'
+                defaultValue={0}
               />
             </td>
           </tr>
@@ -115,11 +130,23 @@ const ExpensesForm: FC<Props> = ({ onAddMonth }) => {
           <tr>
             <td>Has spent</td>
             <td>
-              <input type='number' ref={p1spentInputRef} min={0} id='p1spent' />
+              <input
+                type='number'
+                ref={p1spentInputRef}
+                min={0}
+                id='p1spent'
+                defaultValue={0}
+              />
             </td>
             <td>{totalSpent}</td>
             <td>
-              <input type='number' ref={p2spentInputRef} min={0} id='p2spent' />
+              <input
+                type='number'
+                ref={p2spentInputRef}
+                min={0}
+                id='p2spent'
+                defaultValue={0}
+              />
             </td>
           </tr>
           <tr>
