@@ -7,14 +7,22 @@ interface Props {
   displayMonth?: Month;
 }
 
-const ExpensesForm: FC<Props> = ({ onAddMonth, displayMonth }) => {
-  const [formFields, setFormFields] = useState<Month>({
-    month: 'not set',
+const ExpensesForm: FC<Props> = ({
+  onAddMonth,
+  displayMonth = {
+    month: '2021-11',
+    person1: 'person 1',
+    person2: 'person 2',
     p1income: 0,
     p2income: 0,
     p1spent: 0,
     p2spent: 0,
-  });
+    p1hasPaid: 0,
+    p2hasPaid: 0,
+    locked: false,
+  },
+}) => {
+  const [formFields, setFormFields] = useState<Month>(displayMonth);
   const monthInputRef = useRef<HTMLInputElement>(null);
   const person1InputRef = useRef<HTMLInputElement>(null);
   const person2InputRef = useRef<HTMLInputElement>(null);
@@ -64,7 +72,7 @@ const ExpensesForm: FC<Props> = ({ onAddMonth, displayMonth }) => {
                 type='month'
                 id='month'
                 min='2018-03'
-                defaultValue='2021-11'
+                defaultValue={displayMonth.month}
                 ref={monthInputRef}
               />
             </td>
@@ -79,7 +87,7 @@ const ExpensesForm: FC<Props> = ({ onAddMonth, displayMonth }) => {
             <td>
               <input
                 type='text'
-                defaultValue='person 1'
+                defaultValue={displayMonth.person1}
                 aria-labelledby='person1'
                 id='person1'
                 ref={person1InputRef}
@@ -89,7 +97,7 @@ const ExpensesForm: FC<Props> = ({ onAddMonth, displayMonth }) => {
             <td>
               <input
                 type='text'
-                defaultValue='person 2'
+                defaultValue={displayMonth.person2}
                 aria-labelledby='person2'
                 id='person2'
                 ref={person2InputRef}
@@ -104,7 +112,7 @@ const ExpensesForm: FC<Props> = ({ onAddMonth, displayMonth }) => {
                 ref={p1incomeInputRef}
                 min={0}
                 id='p1income'
-                defaultValue={0}
+                defaultValue={displayMonth.p1income}
               />
             </td>
             <td>{totalIncome}</td>
@@ -114,7 +122,7 @@ const ExpensesForm: FC<Props> = ({ onAddMonth, displayMonth }) => {
                 ref={p2incomeInputRef}
                 min={0}
                 id='p2income'
-                defaultValue={0}
+                defaultValue={displayMonth.p2income}
               />
             </td>
           </tr>
@@ -135,7 +143,7 @@ const ExpensesForm: FC<Props> = ({ onAddMonth, displayMonth }) => {
                 ref={p1spentInputRef}
                 min={0}
                 id='p1spent'
-                defaultValue={0}
+                defaultValue={displayMonth.p1spent}
               />
             </td>
             <td>{totalSpent}</td>
@@ -145,7 +153,7 @@ const ExpensesForm: FC<Props> = ({ onAddMonth, displayMonth }) => {
                 ref={p2spentInputRef}
                 min={0}
                 id='p2spent'
-                defaultValue={0}
+                defaultValue={displayMonth.p2spent}
               />
             </td>
           </tr>

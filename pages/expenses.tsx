@@ -10,10 +10,20 @@ import MonthsList from '../components/expenses/MonthsList';
 const ExpensesPage: NextPage = () => {
   const [months, setMonths] = useState<Month[]>([]);
 
-  const monthAddHandler = (formData: Month) => {
-    formData.id = Math.random().toString();
-    setMonths((prevMonths) => [...prevMonths, formData]);
-    console.log(months);
+  const addMonthHandler = async (enteredMonthData: Month) => {
+    const response = await fetch('/api/new-month', {
+      method: 'POST',
+      body: JSON.stringify(enteredMonthData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+    console.log(data);
+    // formData.id = Math.random().toString();
+    // setMonths((prevMonths) => [...prevMonths, formData]);
+    // console.log(months);
   };
 
   return (
@@ -31,7 +41,7 @@ const ExpensesPage: NextPage = () => {
           title='This is the Expenses page'
           subtitle='Add your expenses here:'
         />
-        <ExpensesForm onAddMonth={monthAddHandler} />
+        <ExpensesForm onAddMonth={addMonthHandler} />
         <MonthsList items={months} />
       </SectionWrapper>
     </>

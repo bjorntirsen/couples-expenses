@@ -5,7 +5,6 @@ import SectionWrapper from '../../components/UI/SectionWrapper';
 import SectionTitle from '../../components/UI/SectionTitle';
 import ExpensesForm from '../../components/expenses/ExpensesForm';
 import { Month } from '../../components/month.model';
-import MonthsList from '../../components/expenses/MonthsList';
 
 const MonthDetailsPage: NextPage = () => {
   const [months, setMonths] = useState<Month[]>([]);
