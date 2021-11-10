@@ -1,4 +1,4 @@
-import { FC, FormEvent, useRef, useState } from 'react';
+import { FC, FormEvent, useRef, useState, useEffect } from 'react';
 import { Month } from '../month.model';
 import classes from './ExpensesForm.module.css';
 
@@ -33,6 +33,20 @@ const ExpensesForm: FC<Props> = ({
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalSpent, setTotalSpent] = useState(0);
 
+  const updateCalculations = () => {
+    // Update calculations
+    const p1income = +p1incomeInputRef.current!.value;
+    const p2income = +p2incomeInputRef.current!.value;
+    const p1spent = +p1spentInputRef.current!.value;
+    const p2spent = +p2spentInputRef.current!.value;
+    if (p1income > 0 || p2income > 0) setTotalIncome(p1income + p2income);
+    if (p1spent > 0 || p2spent > 0) setTotalSpent(p1spent + p2spent);
+  };
+
+  useEffect(() => {
+    updateCalculations();
+  }, []);
+
   const handleOnChange = (event: FormEvent) => {
     // Update formData
     const eventTarget = event.target as HTMLInputElement;
@@ -42,13 +56,7 @@ const ExpensesForm: FC<Props> = ({
       ? (formData[eventTarget.id] = +eventTarget.value)
       : (formData[eventTarget.id] = eventTarget.value);
     setFormFields(formData);
-    // Update calculations
-    const p1income = +p1incomeInputRef.current!.value;
-    const p2income = +p2incomeInputRef.current!.value;
-    const p1spent = +p1spentInputRef.current!.value;
-    const p2spent = +p2spentInputRef.current!.value;
-    if (p1income > 0 || p2income > 0) setTotalIncome(p1income + p2income);
-    if (p1spent > 0 || p2spent > 0) setTotalSpent(p1spent + p2spent);
+    updateCalculations();
   };
 
   const monthSubmitHandler = (event: FormEvent) => {
