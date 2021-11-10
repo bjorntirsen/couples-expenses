@@ -1,15 +1,18 @@
 import type { NextPage } from 'next';
 import { useState } from 'react';
 import Head from 'next/head';
+import { MongoClient } from 'mongodb';
 import SectionWrapper from '../components/UI/SectionWrapper';
 import SectionTitle from '../components/UI/SectionTitle';
 import ExpensesForm from '../components/expenses/ExpensesForm';
 import { Month } from '../components/month.model';
 import MonthsList from '../components/expenses/MonthsList';
 
-const ExpensesPage: NextPage = () => {
-  const [months, setMonths] = useState<Month[]>([]);
+interface Props {
+  months: Month[];
+}
 
+const ExpensesPage: NextPage<Props> = ({ months }) => {
   const addMonthHandler = async (enteredMonthData: Month) => {
     const response = await fetch('/api/new-month', {
       method: 'POST',
@@ -47,5 +50,47 @@ const ExpensesPage: NextPage = () => {
     </>
   );
 };
+
+export async function getStaticProps() {
+  const client = await MongoClient.connect(process.env.DB_URI!);
+  const db = client.db();
+  const monthsCollection = db.collection('months');
+
+  const months = await monthsCollection.find().toArray();
+  console.log(months);
+  client.close();
+
+  return {
+    props: {
+      months: months.map(
+        ({
+          month,
+          person1,
+          person2,
+          p1income,
+          p2income,
+          p1spent,
+          p2spent,
+          p1hasPaid,
+          p2hasPaid,
+          locked,
+        }) => ({
+          month,
+          person1,
+          person2,
+          p1income,
+          p2income,
+          p1spent,
+          p2spent,
+          p1hasPaid,
+          p2hasPaid,
+          locked,
+          id: 'temp',
+        })
+      ),
+    },
+    revalidate: 10,
+  };
+}
 
 export default ExpensesPage;
