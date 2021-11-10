@@ -1,4 +1,5 @@
 export interface Month {
+  _id?: object;
   id?: string;
   month: string;
   person1: string;

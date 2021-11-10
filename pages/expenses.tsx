@@ -57,7 +57,6 @@ export async function getStaticProps() {
   const monthsCollection = db.collection('months');
 
   const months = await monthsCollection.find().toArray();
-  console.log(months);
   client.close();
 
   return {
@@ -74,6 +73,7 @@ export async function getStaticProps() {
           p1hasPaid,
           p2hasPaid,
           locked,
+          _id,
         }) => ({
           month,
           person1,
@@ -85,11 +85,11 @@ export async function getStaticProps() {
           p1hasPaid,
           p2hasPaid,
           locked,
-          id: 'temp',
+          id: _id.toString(),
         })
       ),
     },
-    revalidate: 10,
+    revalidate: 1,
   };
 }
 
