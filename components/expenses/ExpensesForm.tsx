@@ -4,13 +4,19 @@ import classes from './ExpensesForm.module.css';
 
 interface Props {
   onAddMonth: (a: Month) => void;
+  updateable?: boolean;
   displayMonth?: Month;
 }
 
+const today = new Date();
+const todayString = today.toISOString();
+const monthString = todayString.substring(0, 7);
+
 const ExpensesForm: FC<Props> = ({
   onAddMonth,
+  updateable = false,
   displayMonth = {
-    month: '2021-11',
+    month: monthString,
     person1: 'person 1',
     person2: 'person 2',
     p1income: 0,
@@ -73,7 +79,6 @@ const ExpensesForm: FC<Props> = ({
     // Update formData
     const eventTarget = event.target as HTMLInputElement;
     const formData: any = { ...formFields };
-    console.log(eventTarget.id, typeof eventTarget.value);
     eventTarget.type === 'number'
       ? (formData[eventTarget.id] = +eventTarget.value)
       : (formData[eventTarget.id] = eventTarget.value);
@@ -84,7 +89,6 @@ const ExpensesForm: FC<Props> = ({
   const monthSubmitHandler = (event: FormEvent) => {
     event.preventDefault();
     onAddMonth(formFields);
-    console.log('submit');
   };
 
   return (
@@ -203,7 +207,7 @@ const ExpensesForm: FC<Props> = ({
       </table>
       <div className={classes.centered}>
         <button className={classes.btn} type='submit'>
-          Save to DB
+          {updateable ? 'Save changes to DB' : 'Save to DB'}
         </button>
       </div>
     </form>
