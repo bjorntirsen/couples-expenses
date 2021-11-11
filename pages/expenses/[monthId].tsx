@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
-import { useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { MongoClient, ObjectId } from 'mongodb';
 import SectionWrapper from '../../components/UI/SectionWrapper';
 import SectionTitle from '../../components/UI/SectionTitle';
@@ -12,12 +12,19 @@ interface Props {
 }
 
 const MonthDetailsPage: NextPage<Props> = ({ monthData }) => {
-  const [months, setMonths] = useState<Month[]>([]);
+  const router = useRouter();
+  const { monthId } = router.query;
+  const updateMonthHandler = async (formData: Month) => {
+    const response = await fetch(`/api/${monthId}`, {
+      method: 'PUT',
+      body: JSON.stringify(formData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-  const monthAddHandler = (formData: Month) => {
-    formData.id = Math.random().toString();
-    setMonths((prevMonths) => [...prevMonths, formData]);
-    console.log(months);
+    const data = await response.json();
+    console.log(data);
   };
 
   return (
@@ -35,7 +42,11 @@ const MonthDetailsPage: NextPage<Props> = ({ monthData }) => {
           title='This is the Details page'
           subtitle='Edit your past expenses here:'
         />
-        <ExpensesForm onAddMonth={monthAddHandler} displayMonth={monthData} />
+        <ExpensesForm
+          onAddMonth={updateMonthHandler}
+          updateable
+          displayMonth={monthData}
+        />
       </SectionWrapper>
     </>
   );

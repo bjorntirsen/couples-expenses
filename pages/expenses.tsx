@@ -1,5 +1,4 @@
 import type { NextPage } from 'next';
-import { useState } from 'react';
 import Head from 'next/head';
 import { MongoClient } from 'mongodb';
 import SectionWrapper from '../components/UI/SectionWrapper';
@@ -24,9 +23,6 @@ const ExpensesPage: NextPage<Props> = ({ months }) => {
 
     const data = await response.json();
     console.log(data);
-    // formData.id = Math.random().toString();
-    // setMonths((prevMonths) => [...prevMonths, formData]);
-    // console.log(months);
   };
 
   return (
