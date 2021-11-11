@@ -36,6 +36,8 @@ const ExpensesForm: FC<Props> = ({
   const [totalSpent, setTotalSpent] = useState(0);
   const [p1shouldBe, setP1shouldBe] = useState(0);
   const [p2shouldBe, setP2shouldBe] = useState(0);
+  const [p1balance, setP1balance] = useState(0);
+  const [p2balance, setP2balance] = useState(0);
 
   const updateCalculations = useCallback(() => {
     const p1income = +p1incomeInputRef.current!.value;
@@ -45,14 +47,23 @@ const ExpensesForm: FC<Props> = ({
     if (p1income > 0 || p2income > 0) setTotalIncome(p1income + p2income);
     if (p1spent > 0 || p2spent > 0) setTotalSpent(p1spent + p2spent);
     if (totalIncome > 0) {
-      setP1incPercent(+((p1income/totalIncome)*100).toFixed(2));
-      setP2incPercent(+((p2income/totalIncome)*100).toFixed(2));
+      setP1incPercent(+((p1income / totalIncome) * 100).toFixed(2));
+      setP2incPercent(+((p2income / totalIncome) * 100).toFixed(2));
     }
     if (totalSpent > 0) {
-      setP1shouldBe(+((totalSpent*p1incPercent)/100).toFixed(0));
-      setP2shouldBe(+((totalSpent*p2incPercent)/100).toFixed(0));
+      setP1shouldBe(+((totalSpent * p1incPercent) / 100).toFixed(0));
+      setP2shouldBe(+((totalSpent * p2incPercent) / 100).toFixed(0));
+      setP1balance(p1spent - p1shouldBe);
+      setP2balance(p2spent - p2shouldBe);
     }
-  }, [totalIncome, p1incPercent, p2incPercent, totalSpent]);
+  }, [
+    totalIncome,
+    p1incPercent,
+    p2incPercent,
+    totalSpent,
+    p1shouldBe,
+    p2shouldBe,
+  ]);
 
   useEffect(() => {
     updateCalculations();
@@ -184,9 +195,9 @@ const ExpensesForm: FC<Props> = ({
           </tr>
           <tr>
             <td>Balance</td>
-            <td>calc</td>
+            <td>{p1balance}</td>
             <td></td>
-            <td>calc</td>
+            <td>{p2balance}</td>
           </tr>
         </tbody>
       </table>
