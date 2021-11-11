@@ -34,6 +34,8 @@ const ExpensesForm: FC<Props> = ({
   const [p1incPercent, setP1incPercent] = useState(0);
   const [p2incPercent, setP2incPercent] = useState(0);
   const [totalSpent, setTotalSpent] = useState(0);
+  const [p1shouldBe, setP1shouldBe] = useState(0);
+  const [p2shouldBe, setP2shouldBe] = useState(0);
 
   const updateCalculations = useCallback(() => {
     const p1income = +p1incomeInputRef.current!.value;
@@ -46,7 +48,11 @@ const ExpensesForm: FC<Props> = ({
       setP1incPercent(+((p1income/totalIncome)*100).toFixed(2));
       setP2incPercent(+((p2income/totalIncome)*100).toFixed(2));
     }
-  }, [totalIncome]);
+    if (totalSpent > 0) {
+      setP1shouldBe(+((totalSpent*p1incPercent)/100).toFixed(0));
+      setP2shouldBe(+((totalSpent*p2incPercent)/100).toFixed(0));
+    }
+  }, [totalIncome, p1incPercent, p2incPercent, totalSpent]);
 
   useEffect(() => {
     updateCalculations();
@@ -172,9 +178,9 @@ const ExpensesForm: FC<Props> = ({
           </tr>
           <tr>
             <td>Should be</td>
-            <td>calc</td>
-            <td>calc</td>
-            <td>calc</td>
+            <td>{p1shouldBe}</td>
+            <td></td>
+            <td>{p2shouldBe}</td>
           </tr>
           <tr>
             <td>Balance</td>
