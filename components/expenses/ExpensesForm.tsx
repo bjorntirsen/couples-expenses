@@ -6,11 +6,15 @@ interface Props {
   onAddMonth: (a: Month) => void;
   displayMonth?: Month;
 }
+const today = new Date();
+const yyyy = today.getFullYear();
+const mm = String(today.getMonth() + 1).padStart(2, '0');
+const monthString = `${yyyy}-${mm}`;
 
 const ExpensesForm: FC<Props> = ({
   onAddMonth,
   displayMonth = {
-    month: '2021-11',
+    month: monthString,
     person1: 'person 1',
     person2: 'person 2',
     p1income: 0,
