@@ -10,8 +10,15 @@
 
 .logo {
   font-size: 2rem;
-  color: var(--white);
+  color: var(--primary-p6);
   font-weight: bold;
+  cursor: pointer;
+}
+
+.logo:hover,
+.logo:active,
+.logo.active {
+  color: var(--white);
 }
 
 .header ul {
@@ -29,7 +36,7 @@
 .header a {
   text-decoration: none;
   font-size: 1.5rem;
-  color: var(--primary-p3);
+  color: var(--primary-p6);
 }
 
 .header a:hover,

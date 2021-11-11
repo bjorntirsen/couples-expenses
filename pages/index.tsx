@@ -24,14 +24,13 @@ const Landing: NextPage = () => {
         />
 
         <GridContainer>
-          <CardLink linkTo='/next'>
-            <h2>Learn about Next.js &rarr;</h2>
-            <p>The React.js framework.</p>
-          </CardLink>
-
           <CardLink linkTo='/expenses'>
             <h2>Split your expenses &rarr;</h2>
             <p>Start using the app!</p>
+          </CardLink>
+          <CardLink linkTo='/next'>
+            <h2>Learn about Next.js &rarr;</h2>
+            <p>The React.js framework.</p>
           </CardLink>
         </GridContainer>
       </SectionWrapper>

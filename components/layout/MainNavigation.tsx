@@ -7,17 +7,19 @@ interface Props {}
 const MainNavigation: FC = (props: Props) => {
   return (
     <header className={classes.header}>
-      <div className={classes.logo}>Couples Expenses</div>
+      <div>
+        {/* eslint-disable-next-line @next/next/link-passhref */}
+        <Link href='/'>
+          <span className={classes.logo}>Couples Expenses</span>
+        </Link>
+      </div>
       <nav>
         <ul>
           <li>
-            <Link href='/'>Landing</Link>
+            <Link href='/expenses'>Expenses</Link>
           </li>
           <li>
             <Link href='/next'>Next.js</Link>
-          </li>
-          <li>
-            <Link href='/expenses'>Expenses</Link>
           </li>
         </ul>
       </nav>
