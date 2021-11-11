@@ -1,4 +1,4 @@
-import { FC, FormEvent, useRef, useState, useEffect } from 'react';
+import { FC, FormEvent, useRef, useState, useEffect, useCallback } from 'react';
 import { Month } from '../month.model';
 import classes from './ExpensesForm.module.css';
 
@@ -31,21 +31,43 @@ const ExpensesForm: FC<Props> = ({
   const p1spentInputRef = useRef<HTMLInputElement>(null);
   const p2spentInputRef = useRef<HTMLInputElement>(null);
   const [totalIncome, setTotalIncome] = useState(0);
+  const [p1incPercent, setP1incPercent] = useState(0);
+  const [p2incPercent, setP2incPercent] = useState(0);
   const [totalSpent, setTotalSpent] = useState(0);
+  const [p1shouldBe, setP1shouldBe] = useState(0);
+  const [p2shouldBe, setP2shouldBe] = useState(0);
+  const [p1balance, setP1balance] = useState(0);
+  const [p2balance, setP2balance] = useState(0);
 
-  const updateCalculations = () => {
-    // Update calculations
+  const updateCalculations = useCallback(() => {
     const p1income = +p1incomeInputRef.current!.value;
     const p2income = +p2incomeInputRef.current!.value;
     const p1spent = +p1spentInputRef.current!.value;
     const p2spent = +p2spentInputRef.current!.value;
     if (p1income > 0 || p2income > 0) setTotalIncome(p1income + p2income);
     if (p1spent > 0 || p2spent > 0) setTotalSpent(p1spent + p2spent);
-  };
+    if (totalIncome > 0) {
+      setP1incPercent(+((p1income / totalIncome) * 100).toFixed(2));
+      setP2incPercent(+((p2income / totalIncome) * 100).toFixed(2));
+    }
+    if (totalSpent > 0) {
+      setP1shouldBe(+((totalSpent * p1incPercent) / 100).toFixed(0));
+      setP2shouldBe(+((totalSpent * p2incPercent) / 100).toFixed(0));
+      setP1balance(p1spent - p1shouldBe);
+      setP2balance(p2spent - p2shouldBe);
+    }
+  }, [
+    totalIncome,
+    p1incPercent,
+    p2incPercent,
+    totalSpent,
+    p1shouldBe,
+    p2shouldBe,
+  ]);
 
   useEffect(() => {
     updateCalculations();
-  }, []);
+  }, [updateCalculations]);
 
   const handleOnChange = (event: FormEvent) => {
     // Update formData
@@ -136,9 +158,9 @@ const ExpensesForm: FC<Props> = ({
           </tr>
           <tr>
             <td>%</td>
-            <td>calc</td>
+            <td>{p1incPercent}</td>
             <td></td>
-            <td>calc</td>
+            <td>{p2incPercent}</td>
           </tr>
           <tr>
             <th colSpan={4}>EXPENSES</th>
@@ -167,15 +189,15 @@ const ExpensesForm: FC<Props> = ({
           </tr>
           <tr>
             <td>Should be</td>
-            <td>calc</td>
-            <td>calc</td>
-            <td>calc</td>
+            <td>{p1shouldBe}</td>
+            <td></td>
+            <td>{p2shouldBe}</td>
           </tr>
           <tr>
             <td>Balance</td>
-            <td>calc</td>
+            <td>{p1balance}</td>
             <td></td>
-            <td>calc</td>
+            <td>{p2balance}</td>
           </tr>
         </tbody>
       </table>
