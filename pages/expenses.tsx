@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import router from 'next/router';
 import { MongoClient } from 'mongodb';
 import SectionWrapper from '../components/UI/SectionWrapper';
 import SectionTitle from '../components/UI/SectionTitle';
@@ -23,6 +24,17 @@ const ExpensesPage: NextPage<Props> = ({ months }) => {
 
     const data = await response.json();
     console.log(data);
+    router.replace('/expenses');
+  };
+
+  const deleteMonthHandler = async (monthId: string) => {
+    const response = await fetch(`/api/${monthId}`, {
+      method: 'DELETE',
+    });
+
+    const data = await response.json();
+    console.log(data);
+    router.replace('/expenses');
   };
 
   return (
@@ -41,7 +53,7 @@ const ExpensesPage: NextPage<Props> = ({ months }) => {
           subtitle='Add your expenses here:'
         />
         <ExpensesForm onAddMonth={addMonthHandler} />
-        <MonthsList items={months} />
+        <MonthsList items={months} onDeleteMonth={deleteMonthHandler} />
       </SectionWrapper>
     </>
   );
@@ -52,7 +64,7 @@ export async function getStaticProps() {
   const db = client.db();
   const monthsCollection = db.collection('months');
 
-  const months = await monthsCollection.find().toArray();
+  const months = await monthsCollection.find().sort({ month: -1 }).toArray();
   client.close();
 
   return {
