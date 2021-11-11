@@ -6,10 +6,10 @@ interface Props {
   onAddMonth: (a: Month) => void;
   displayMonth?: Month;
 }
+
 const today = new Date();
-const yyyy = today.getFullYear();
-const mm = String(today.getMonth() + 1).padStart(2, '0');
-const monthString = `${yyyy}-${mm}`;
+const todayString = today.toISOString()
+const monthString = todayString.substring(0, 7);
 
 const ExpensesForm: FC<Props> = ({
   onAddMonth,
