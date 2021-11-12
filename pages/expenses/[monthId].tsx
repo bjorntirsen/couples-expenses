@@ -24,7 +24,8 @@ const MonthDetailsPage: NextPage<Props> = ({ monthData }) => {
     });
 
     const data = await response.json();
-    console.log(data);
+    router.replace(`/expenses/${monthId}`);
+    return data;
   };
 
   return (
