@@ -209,7 +209,7 @@ const ExpensesForm: FC<Props> = ({
           </tr>
         </tbody>
       </table>
-      <div className={classes.centered}>
+      <div className={`${classes.centered} ${classes.btn_container}`}>
         <button className={classes.btn} type='submit'>
           {updateable ? 'Save changes to DB' : 'Save to DB'}
         </button>
