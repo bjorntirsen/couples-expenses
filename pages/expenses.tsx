@@ -23,8 +23,8 @@ const ExpensesPage: NextPage<Props> = ({ months }) => {
     });
 
     const data = await response.json();
-    console.log(data);
     router.replace('/expenses');
+    return data;
   };
 
   const deleteMonthHandler = async (monthId: string) => {
@@ -33,8 +33,8 @@ const ExpensesPage: NextPage<Props> = ({ months }) => {
     });
 
     const data = await response.json();
-    console.log(data);
     router.replace('/expenses');
+    return data;
   };
 
   return (

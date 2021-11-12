@@ -45,6 +45,10 @@ const ExpensesForm: FC<Props> = ({
   const [p1balance, setP1balance] = useState(0);
   const [p2balance, setP2balance] = useState(0);
 
+  const [wasChanged, setWasChanged] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [buttonTxt, setButtonTxt] = useState('Edit above');
+
   const updateCalculations = useCallback(() => {
     const p1income = +p1incomeInputRef.current!.value;
     const p2income = +p2incomeInputRef.current!.value;
@@ -76,6 +80,7 @@ const ExpensesForm: FC<Props> = ({
   }, [updateCalculations]);
 
   const handleOnChange = (event: FormEvent) => {
+    setWasChanged(true);
     // Update formData
     const eventTarget = event.target as HTMLInputElement;
     const formData: any = { ...formFields };
@@ -86,10 +91,25 @@ const ExpensesForm: FC<Props> = ({
     updateCalculations();
   };
 
-  const monthSubmitHandler = (event: FormEvent) => {
+  const monthSubmitHandler = async (event: FormEvent) => {
+    setIsLoading(true);
     event.preventDefault();
-    onAddMonth(formFields);
+    const response: any = await onAddMonth(formFields);
+    if (typeof response === 'object') {
+      setIsLoading(false);
+      setWasChanged(false);
+      setButtonTxt('Edit above');
+    }
   };
+
+  useEffect(() => {
+    const buttonTxtHandler = () => {
+      if (isLoading) return 'Saving...';
+      if (wasChanged) return updateable ? 'Save changes to DB' : 'Save to DB';
+      return 'Edit above';
+    };
+    setButtonTxt(buttonTxtHandler);
+  }, [setButtonTxt, isLoading, updateable, wasChanged]);
 
   return (
     <form
@@ -209,11 +229,13 @@ const ExpensesForm: FC<Props> = ({
           </tr>
         </tbody>
       </table>
-      <div className={`${classes.centered} ${classes.btn_container}`}>
-        <button className={classes.btn} type='submit'>
-          {updateable ? 'Save changes to DB' : 'Save to DB'}
-        </button>
-      </div>
+      {wasChanged && (
+        <div className={`${classes.centered} ${classes.btn_container}`}>
+          <button className={classes.btn} type='submit'>
+            {buttonTxt}
+          </button>
+        </div>
+      )}
     </form>
   );
 };
