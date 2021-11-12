@@ -97,12 +97,13 @@ const ExpensesForm: FC<Props> = ({
       onSubmit={monthSubmitHandler}
       className={classes.form_container}
     >
-      <table>
+      <table className={classes.table}>
         <thead>
           <tr>
-            <td colSpan={4} className={classes.text_center}>
+            <td colSpan={3} className={classes.text_center}>
               <label htmlFor='month'>Month: </label>
               <input
+                className={classes.month_input}
                 type='month'
                 id='month'
                 min='2018-03'
@@ -114,10 +115,9 @@ const ExpensesForm: FC<Props> = ({
         </thead>
         <tbody>
           <tr>
-            <th colSpan={4}>INCOME</th>
+            <th colSpan={3}>INCOME</th>
           </tr>
           <tr>
-            <td></td>
             <td>
               <input
                 type='text'
@@ -139,7 +139,6 @@ const ExpensesForm: FC<Props> = ({
             </td>
           </tr>
           <tr>
-            <td>Amount</td>
             <td>
               <input
                 type='number'
@@ -161,16 +160,17 @@ const ExpensesForm: FC<Props> = ({
             </td>
           </tr>
           <tr>
-            <td>%</td>
-            <td>{p1incPercent}</td>
+            <td>{p1incPercent}%</td>
             <td></td>
-            <td>{p2incPercent}</td>
+            <td>{p2incPercent}%</td>
           </tr>
           <tr>
-            <th colSpan={4}>EXPENSES</th>
+            <th colSpan={3}>EXPENSES</th>
           </tr>
           <tr>
-            <td>Has spent</td>
+            <td colSpan={3}>Has spent</td>
+          </tr>
+          <tr>
             <td>
               <input
                 type='number'
@@ -192,13 +192,17 @@ const ExpensesForm: FC<Props> = ({
             </td>
           </tr>
           <tr>
-            <td>Should be</td>
+            <td colSpan={3}>Should be</td>
+          </tr>
+          <tr>
             <td>{p1shouldBe}</td>
             <td></td>
             <td>{p2shouldBe}</td>
           </tr>
           <tr>
-            <td>Balance</td>
+            <td colSpan={3}>Balance</td>
+          </tr>
+          <tr>
             <td>{p1balance}</td>
             <td></td>
             <td>{p2balance}</td>
