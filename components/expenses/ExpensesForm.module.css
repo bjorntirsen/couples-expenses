@@ -7,7 +7,8 @@
   padding: 1rem;
 }
 
-.text_center {
+.table td,
+.table input {
   text-align: center;
 }
 
@@ -15,6 +16,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.btn_container {
+  margin-top: 1rem;
 }
 
 .btn {
@@ -27,7 +32,30 @@
   color: var(--white);
 }
 
-.btn:hover, .btn:focus {
+.btn:hover,
+.btn:focus {
   background-color: var(--white);
   color: var(--primary-m9);
+}
+
+.month_input {
+  width: 9.8rem !important;
+}
+
+@media (max-width: 450px) {
+  .table input {
+    width: 8rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .table input {
+    width: 7rem;
+  }
+}
+
+@media (max-width: 350px) {
+  .table input {
+    width: 6rem;
+  }
 }
