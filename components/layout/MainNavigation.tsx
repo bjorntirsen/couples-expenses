@@ -1,26 +1,44 @@
 import React, { FC } from 'react';
 import Link from 'next/link';
+import { useSession, signOut } from 'next-auth/client';
+
 import classes from './MainNavigation.module.css';
 
 interface Props {}
 
 const MainNavigation: FC = (props: Props) => {
+  const [session, loading] = useSession();
+
+  const logoutHandler = () => {
+    signOut();
+  };
+
   return (
     <header className={classes.header}>
       <div className={classes.logo_container}>
-        {/* eslint-disable-next-line @next/next/link-passhref */}
         <Link href='/'>
-          <span className={classes.logo}>Couples Expenses</span>
+          <a>
+            <span className={classes.logo}>Couples Expenses</span>
+          </a>
         </Link>
       </div>
       <nav>
         <ul>
-          <li>
-            <Link href='/expenses'>Expenses</Link>
-          </li>
-          <li>
-            <Link href='/next'>Next.js</Link>
-          </li>
+          {!session && !loading && (
+            <li>
+              <Link href='/auth'>Login</Link>
+            </li>
+          )}
+          {session && (
+            <li>
+              <Link href='/expenses'>Expenses</Link>
+            </li>
+          )}
+          {session && (
+            <li>
+              <button onClick={logoutHandler}>Logout</button>
+            </li>
+          )}
         </ul>
       </nav>
     </header>
