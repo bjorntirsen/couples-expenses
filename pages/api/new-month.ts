@@ -2,6 +2,17 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/client';
 import { connectToDatabase } from '../../lib/db';
 import { ObjectId } from 'mongodb';
+import 'next-auth';
+
+declare module 'next-auth' {
+  interface User {
+    id: number;
+  }
+
+  interface Session {
+    user: User;
+  }
+}
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
@@ -16,19 +27,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const data = req.body;
+    const userId = session!.user.id;
     const client = await connectToDatabase();
     const db = client.db();
     const monthsCollection = db.collection('months');
 
-    // const userCollection = db.collection('users');
-    // const user = await userCollection.findOne({ _id: new ObjectId(session!.user!.id) });
-    // console.log(user);
+    data['createdBy'] = new ObjectId(userId);
 
     const result = await monthsCollection.insertOne(data);
-    console.log(result);
     client.close();
 
-    res.status(201).json({ message: 'Month inserted!' });
+    res.status(201).json({ message: 'Month inserted!', result });
   } catch (err: any) {
     res.status(400).json({ error: err, errorMessage: err.message });
   }
