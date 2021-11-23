@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { Session } from 'next-auth';
 import Providers from 'next-auth/providers';
 import { verifyPassword } from '../../../lib/auth';
 import { connectToDatabase } from '../../../lib/db';
@@ -6,6 +6,32 @@ import { connectToDatabase } from '../../../lib/db';
 export default NextAuth({
   session: {
     jwt: true,
+  },
+  // https://next-auth.js.org/configuration/options#jwt
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    maxAge: 60 * 60 * 24 * 30,
+    encryption: true,
+    // You can define your own encode/decode functions for signing and encryption
+    // if you want to override the default behaviour.
+    // async encode ({ secret, token, maxAge }) => {},
+    // async decode ({ secret, token, maxAge }) => {},
+  },
+  callbacks: {
+    jwt: async (token, user) => {
+      //  "user" parameter is the object received from "authorize"
+      //  "token" is being send below to "session" callback...
+      //  ...so we set "user" param of "token" to object from "authorize"...
+      //  ...and return it...
+      user && (token.user = user);
+      return Promise.resolve(token); // ...here
+    },
+    session: async (session: Session, user: any) => {
+      //  "session" is current session object
+      //  below we set "user" param of "session" to value received from "jwt" callback
+      session.user = user.user;
+      return Promise.resolve(session);
+    },
   },
   providers: [
     Providers.Credentials({
@@ -32,7 +58,7 @@ export default NextAuth({
         }
 
         client.close();
-        return { email: user.email };
+        return { email: user.email, id: user._id.toString() };
       },
     }),
   ],
