@@ -1,12 +1,15 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import router from 'next/router';
-import { MongoClient } from 'mongodb';
+import { getSession } from 'next-auth/client';
+
 import SectionWrapper from '../components/UI/SectionWrapper';
 import SectionTitle from '../components/UI/SectionTitle';
 import ExpensesForm from '../components/expenses/ExpensesForm';
 import { Month } from '../components/month.model';
 import MonthsList from '../components/expenses/MonthsList';
+import { connectToDatabase } from '../lib/db';
+import { ObjectId } from 'mongodb';
 
 interface Props {
   months: Month[];
@@ -59,16 +62,29 @@ const ExpensesPage: NextPage<Props> = ({ months }) => {
   );
 };
 
-export async function getStaticProps() {
-  const client = await MongoClient.connect(process.env.DB_URI!);
+export const getServerSideProps = async (context: any) => {
+  const session = await getSession({ req: context.req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth',
+        permanent: false,
+      },
+    };
+  }
+
+  const client = await connectToDatabase();
   const db = client.db();
   const monthsCollection = db.collection('months');
-
-  const months = await monthsCollection.find().sort({ month: -1 }).toArray();
+  const months = await monthsCollection
+    .find({ createdBy: new ObjectId(session.user.id) })
+    .sort({ month: -1 })
+    .toArray();
   client.close();
 
   return {
     props: {
+      session,
       months: months.map(
         ({
           month,
@@ -97,8 +113,7 @@ export async function getStaticProps() {
         })
       ),
     },
-    revalidate: 1,
   };
-}
+};
 
 export default ExpensesPage;

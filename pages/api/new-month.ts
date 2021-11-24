@@ -1,19 +1,45 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { MongoClient } from 'mongodb';
+import { getSession } from 'next-auth/client';
+import { connectToDatabase } from '../../lib/db';
+import { ObjectId } from 'mongodb';
+import 'next-auth';
+
+declare module 'next-auth' {
+  interface User {
+    id: number;
+    name: string;
+    email: string;
+  }
+
+  interface Session {
+    user: User;
+  }
+}
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  try {
-    if (req.method === 'POST') {
-      const data = req.body;
-      const client = await MongoClient.connect(process.env.DB_URI!);
-      const db = client.db();
-      const monthsCollection = db.collection('months');
-      const result = await monthsCollection.insertOne(data);
-      console.log(result);
-      client.close();
+  if (req.method !== 'POST') {
+    res.status(405).json({ message: 'This route is only for post requests!' });
+    return;
+  }
 
-      res.status(201).json({ message: 'Month inserted!' });
-    }
+  const session = await getSession({ req: req });
+  if (!session) {
+    res.status(401).json({ message: 'Not authenticated!' });
+  }
+
+  try {
+    const data = req.body;
+    const userId = session!.user.id;
+    const client = await connectToDatabase();
+    const db = client.db();
+    const monthsCollection = db.collection('months');
+
+    data['createdBy'] = new ObjectId(userId);
+
+    const result = await monthsCollection.insertOne(data);
+    client.close();
+
+    res.status(201).json({ message: 'Month inserted!', result });
   } catch (err: any) {
     res.status(400).json({ error: err, errorMessage: err.message });
   }
