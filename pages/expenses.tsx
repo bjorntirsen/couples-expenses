@@ -9,6 +9,7 @@ import ExpensesForm from '../components/expenses/ExpensesForm';
 import { Month } from '../components/month.model';
 import MonthsList from '../components/expenses/MonthsList';
 import { connectToDatabase } from '../lib/db';
+import { ObjectId } from 'mongodb';
 
 interface Props {
   months: Month[];
@@ -75,9 +76,12 @@ export const getServerSideProps = async (context: any) => {
   const client = await connectToDatabase();
   const db = client.db();
   const monthsCollection = db.collection('months');
-  const months = await monthsCollection.find().sort({ month: -1 }).toArray();
+  const months = await monthsCollection
+    .find({ createdBy: new ObjectId(session.user.id) })
+    .sort({ month: -1 })
+    .toArray();
   client.close();
-  
+
   return {
     props: {
       session,
