@@ -30,7 +30,7 @@
   margin: 0;
   padding: 0;
   display: flex;
-  align-items: baseline;
+  align-items: center;
 }
 
 .header li {
@@ -41,6 +41,11 @@
 .header button {
   text-decoration: none;
   font-size: 24px;
+  color: var(--primary-p6);
+}
+
+.username {
+  font-size: 16px;
   color: var(--primary-p6);
 }
 
@@ -60,7 +65,7 @@
   color: var(--white);
 }
 
-@media (max-width: 500px) {
+@media (max-width: 830px) {
   .header {
     flex-direction: column;
     height: 110px;
@@ -70,7 +75,7 @@
   }
 }
 
-@media (max-width: 350px) {
+@media (max-width: 595px) {
   .header {
     height: 100%;
     overflow: hidden;
@@ -81,5 +86,12 @@
   .header a,
   .header button {
     font-size: 20px;
+  }
+  .header ul {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .header li {
+    margin: 8px;
   }
 }

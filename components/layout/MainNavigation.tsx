@@ -30,14 +30,17 @@ const MainNavigation: FC = (props: Props) => {
             </li>
           )}
           {session && (
-            <li>
-              <Link href='/expenses'>Expenses</Link>
-            </li>
-          )}
-          {session && (
-            <li>
-              <button onClick={logoutHandler}>Logout</button>
-            </li>
+            <>
+              <li>
+                <Link href='/expenses'>Expenses</Link>
+              </li>
+              <li>
+                <span className={classes.username}>Logged in as: {session.user.name}</span>
+              </li>
+              <li>
+                <button onClick={logoutHandler}>Logout</button>
+              </li>
+            </>
           )}
         </ul>
       </nav>
