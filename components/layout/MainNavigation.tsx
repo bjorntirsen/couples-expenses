@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/client';
 
@@ -8,8 +8,10 @@ interface Props {}
 
 const MainNavigation: FC = (props: Props) => {
   const [session, loading] = useSession();
+  const [isLoading, setIsLoading] = useState(false);
 
   const logoutHandler = () => {
+    setIsLoading(true);
     signOut();
   };
 
@@ -35,10 +37,14 @@ const MainNavigation: FC = (props: Props) => {
                 <Link href='/expenses'>Expenses</Link>
               </li>
               <li>
-                <span className={classes.username}>Logged in as: {session.user.name}</span>
+                <span className={classes.username}>
+                  Logged in as: {session.user.name}
+                </span>
               </li>
               <li>
-                <button onClick={logoutHandler}>Logout</button>
+                <button onClick={logoutHandler}>
+                  {isLoading ? 'Logging out...' : 'Logout'}
+                </button>
               </li>
             </>
           )}

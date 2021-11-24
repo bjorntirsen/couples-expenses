@@ -53,6 +53,10 @@
   padding: 0.5rem 2.5rem;
 }
 
+.message {
+  color: var(--primary-p7);
+}
+
 .actions button:hover {
   background-color: var(--primary-m18);
   border-color: var(--primary-m18);

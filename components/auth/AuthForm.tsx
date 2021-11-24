@@ -25,6 +25,7 @@ const AuthForm: FC = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const [isLogin, setIsLogin] = useState(true);
+  const [message, setMessage] = useState('');
   const router = useRouter();
 
   const switchAuthModeHandler = () => {
@@ -32,6 +33,7 @@ const AuthForm: FC = () => {
   };
 
   const submitHandler = async (event: FormEvent) => {
+    setMessage('Loading...');
     event.preventDefault();
     const enteredEmail = emailInputRef.current!.value;
     const enteredPassword = passwordInputRef.current!.value;
@@ -53,8 +55,11 @@ const AuthForm: FC = () => {
           enteredPassword
         );
         console.log(result);
+        switchAuthModeHandler();
+        setMessage('Click to log in with your new account.');
       } catch (error) {
         console.log(error);
+        setMessage('Something went wrong. Please try again.');
       }
     }
   };
@@ -97,6 +102,7 @@ const AuthForm: FC = () => {
         </div>
         <div className={classes.actions}>
           <button>{isLogin ? 'Login' : 'Create Account'}</button>
+          {message && <p className={classes.message}>{message}</p>}
           <button
             type='button'
             className={classes.toggle}
