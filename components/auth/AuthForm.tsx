@@ -4,10 +4,10 @@ import { useRouter } from 'next/router';
 
 import classes from './AuthForm.module.css';
 
-const createUser = async (email: string, password: string) => {
+const createUser = async (email: string, name: string, password: string) => {
   const response = await fetch('/api/auth/signup', {
     method: 'POST',
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, name, password }),
     headers: {
       'content-type': 'application/json',
     },
@@ -22,6 +22,7 @@ const createUser = async (email: string, password: string) => {
 
 const AuthForm: FC = () => {
   const emailInputRef = useRef<HTMLInputElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const [isLogin, setIsLogin] = useState(true);
   const router = useRouter();
@@ -46,7 +47,11 @@ const AuthForm: FC = () => {
       }
     } else {
       try {
-        const result = await createUser(enteredEmail, enteredPassword);
+        const result = await createUser(
+          enteredEmail,
+          nameInputRef.current!.value,
+          enteredPassword
+        );
         console.log(result);
       } catch (error) {
         console.log(error);
@@ -68,6 +73,18 @@ const AuthForm: FC = () => {
             ref={emailInputRef}
           />
         </div>
+        {!isLogin && (
+          <div className={classes.control}>
+            <label htmlFor='name'>Your Name</label>
+            <input
+              type='name'
+              id='name'
+              required
+              autoComplete='name'
+              ref={nameInputRef}
+            />
+          </div>
+        )}
         <div className={classes.control}>
           <label htmlFor='password'>Your Password</label>
           <input

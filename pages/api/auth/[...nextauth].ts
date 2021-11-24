@@ -58,7 +58,7 @@ export default NextAuth({
         }
 
         client.close();
-        return { email: user.email, id: user._id.toString() };
+        return { email: user.email, name: user.name, id: user._id.toString() };
       },
     }),
   ],

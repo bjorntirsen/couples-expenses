@@ -7,10 +7,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
   const data = req.body;
-  const { email, password } = data;
+  const { email, name, password } = data;
   if (
     !email ||
     !email.includes('@') ||
+    !name ||
+    name.trim().length < 3 ||
     !password ||
     password.trim().length < 7
   ) {
@@ -32,8 +34,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const hashedPassword = await hashPassword(password);
   const result = await db
     .collection('users')
-    .insertOne({ email, password: hashedPassword });
-  res.status(201).json({ message: 'Created user!' });
+    .insertOne({ email, name, password: hashedPassword });
+  res.status(201).json({ message: 'Created user!', result });
   client.close();
 };
 
